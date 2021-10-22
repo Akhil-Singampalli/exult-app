@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { Component } from 'react';
 import axios from 'axios';
+
 import { emails } from './Components/models/email';
 import "./index.css";
 // import "./custom.css";
@@ -47,40 +48,56 @@ class App extends Component {
   }
   submitEmails = () => {
     const { formvalue } = this.state.formvalue
-    const data = {
-      to: [
+    let name = this.state.formvalue.name;
+    let email = this.state.formvalue.email;
+    console.log(typeof name);
+    console.log(email);
+    const data1 = {
+      "to": [
         {
-          name: this.state.formvalue.name,
-          email: this.state.formvalue.email
+          "name": "Akhil",
+          "email": "singampalliakhil@gmail.com"
         }
       ],
-      from: {
-        name: "Exult",
-        email: "info@cosmetica.in"
+      "from": {
+        "name": "Exult",
+        "email": "info@cosmetica.in"
       },
-      domain: "cosmetica.in",
-      mail_type_id: "1",
-      template_id: "Offers",
-      authkey: ""
+      "domain": "cosmetica.in",
+      "mail_type_id": "1",
+      "template_id": "Offers",
+      "authkey": "312379AYnyiHzkHSVm6161ac34P1"
     }
 
-    axios.post('https://api.msg91.com/api/v5/email/send', data).then(response => {
-      this.setState({ userData: response.data })
-    }).catch(error => {
-      if (error.response) {
-        this.setState();
-      } else {
-        this.setState();
-      }
+    // axios.post('https://api.msg91.com/api/v5/email/send', data1)
+    //   .then(response => {
+
+    //     // console.log('here');
+    //     console.log(response);
+    //   }).catch(error => {
+    //     console.log('here')
+    //     console.log(error);
+    //   })
+
+    // let url = 'https://api.msg91.com/api/v5/email/send';
+    axios({
+      method: 'POST',
+      url: 'https://api.msg91.com/api/v5/email/send',
+      data: data1,
+      config: { headers: ({ 'Content-Type': 'application/json' }) }
     })
+      .then(response => {
+        console.log(response);
+      }).catch(error => {
+        console.log(error.response)
+      });
   }
-
-
 
 
   handleSubmit = event => {
     event.preventDefault();
     this.submitEmails();
+    // console.log('here');
   }
 
   handleChange = event => {
@@ -131,7 +148,7 @@ class App extends Component {
                     />
                   </div>
                   <br />
-                  <button type="submit" className="btn btn-primary" ><b>Send</b></button>
+                  <button type="submit" onClick={this.handleSubmit} className="btn btn-primary" ><b>Send</b></button>
                   <br />
                 </form>
               </div>
